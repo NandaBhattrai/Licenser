@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+<script src="~/Content/jqueryconfirmdist/jquery-confirm.min.js"></script>
+<link href="~/Content/jqueryconfirmdist/jquery-confirm.min.css" rel="stylesheet" />
+<link href="~/Content/kendo.common-material.min.css" rel="stylesheet" />
+<script src="~/Content/kendo.js"></script>
+<link href="~/Content/kendo.material.min.css" rel="stylesheet" />
+<div>
+    <h4>Product</h4>
+    @ViewBag.Message
+</div>
+<button id="btn_modal" onclick="getBody()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" type="button">create</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Product Entry</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="body" class="modal-body">
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+<div id="grid">
+
+</div>
+<script>
+	$("#grid").kendoGrid({
+  dataSource: {
+      transport: {
+          read: "@Url.Action("listProduct", "Product")",
+          dataType: "json"
+      },
+     
+      pageSize: 5
+  },
+  height: 550,
+  groupable: true,
+  sortable: true,
+  pageable: {
+      refresh: true,
+      pageSizes: true,
+      buttonCount: 5
+  },
+  columns: [
+      {
+          field: "ProductId",
+          title: "Id",
+          hidden:true
+      }, {
+      field: "Name",
+      title: "Product Name"
+  }, {
+      field: "Description",
+      title: "Product Description"
+  }, {
+      field: "Version",
+      title: "Product Version"
+  },
+  {
+      template: "<button id='edit' pid='#:ProductId#' onclick='editData(#:ProductId#)' class='btn btn-success'>Edit</button>&nbsp;<button id='delete' pid='#:ProductId#' class='btn btn-danger'>Delete</button>",
+      field: "",
+      title: "Action",
+      width: 240
+  }],
+});    
+    function getBody()
+    {
+        $('#body').load("@Url.Action("Create","Product")");
+
+    }
+    function editData(id)
+    {
+        $.confirm({
+            title: 'Product Edit',
+            content: 'url:@Url.Action("Edit", "Product")?id='+id,
+            columnClass: 'large',
+        });
+    }
+   
+</script>
