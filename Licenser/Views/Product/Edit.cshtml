@@ -12,7 +12,7 @@
         Value = "InActive"
     });
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm(new { @class = "editform" }))
 {
     @Html.AntiForgeryToken()
     
